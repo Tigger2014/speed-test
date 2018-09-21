@@ -17,6 +17,7 @@ const cli = meow(`
 	Options
 	  --json -j     Output the result as JSON
 	  --bytes -b    Output the result in megabytes per second (MBps)
+	  --server -s Set SpeedTest server to use
 	  --verbose -v  Output more detailed information
 `, {
 	flags: {
@@ -27,6 +28,11 @@ const cli = meow(`
 		bytes: {
 			type: 'boolean',
 			alias: 'b'
+		},
+		server: {
+			type: 'string',
+			alias: 's',
+			default : 'auto'
 		},
 		verbose: {
 			type: 'boolean',
@@ -97,8 +103,13 @@ function map(server) {
 	return server;
 }
 
-const st = speedtest({maxTime: 20000});
-
+if (cli.flags.server ==='Wimbledon'){
+	var st = speedtest({maxTime: 20000, serverId:"12779"});
+}	else if (cli.flags.server ==='CFL'){
+	var st = speedtest({maxTime: 20000, serverId:"18170"});
+} else {
+	var st = speedtest({maxTime: 20000});
+}
 if (!cli.flags.json) {
 	setInterval(render, 50);
 }
